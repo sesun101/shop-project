@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link href = "/main.css" rel = "stylesheet">
+
+</head>
+<body>
+
+ <div th:replace = "~{ nav.html :: navbar }"></div>
+
+ <div class="card" th:each = "i : ${items}" th:id = "'item-' + ${i.id}">
+    <img th:src = "${#strings.isEmpty(i.img_url) ? 'https://placehold.co/300' : i.img_url}"
+         style = "width: 300px; height: 300px; object-fit: cover">
+     <div>
+         <h4>
+             <a th:text = "${i.title}" th:href = "@{'/detail/' + ${i.id}}">상품</a>
+         </h4>
+         <p th:text = "${#numbers.formatInteger(i.price, 3, 'COMMA')} + '원'">가격</p>
+         <a th:href = "@{'/edit/' + ${i.id}}" style = "display: inline" sec:authorize="hasAuthority('admin')">✏️</a>
+         <a href = "#" class = "btn" th:attr = "data-id=${i.id}" style = "margin-left: 10px;" sec:authorize="hasAuthority('admin')">🗑️</a>
+         <form th:action = "@{'/delete/image/' + ${i.id}}" method = "post">
+             <button type="submit" sec:authorize="hasAuthority('admin')" >사진 삭제</button>
+         </form>
+
+     </div>
+
+ </div>
+
+  <span th:each = "pageNum : ${#numbers.sequence(1, totalPages)}">
+      <a th:href = "@{'/list/page/' + ${pageNum}}"
+         th:text = "${pageNum}"
+         th:classappend="${pageNum == currentPage} ? 'active' : ''"
+         style = "font-size: 24px; margin-right: 20px;"></a>
+  </span>
+
+
+<script>
+    document.querySelectorAll('.btn').forEach(function(btn) {
+    btn.onclick = function(e) {
+      e.preventDefault();
+
+      const id = this.dataset.id;
+
+      fetch(`/delete/${id}`, {
+        method: 'DELETE'
+      })
+
+      .then(res => {
+        if (res.ok) {
+          document.getElementById(`item-${id}`).remove();
+        }
+      });
+    };
+    });
+</script>
+
+</body>
+</html>

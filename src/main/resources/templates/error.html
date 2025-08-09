@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>에러 발생!</title>
+</head>
+<body>
+<h1>뭔가 잘못됐습니다 😢</h1>
+<p>죄송합니다. 요청 처리 중 문제가 발생했습니다.</p>
+<p th:text="${status}"></p>
+<p th:text="${error}"></p>
+<p th:text="${path}"></p>
+<p th:text="${message}"></p>
+<p th:text="${exception}"></p>
+</body>
+</html>

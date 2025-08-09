@@ -1,0 +1,11 @@
+<div class="nav" th:fragment = "navbar">
+    <a class="logo">SesunMall</a>
+    <a href="/list">List</a>
+    <a href="/write" sec:authorize="hasAuthority('admin')">Write</a>
+    <a href="/login" sec:authorize="isAnonymous">Login</a>
+    <a href="/register" sec:authorize="isAnonymous">Register</a>
+    <span sec:authorize="hasAuthority('user')" sec:authentication="principal.username" style="margin-right: 8px"></span>
+    <form action="/logout" method="POST">
+        <button type="submit" sec:authorize="hasAuthority('user')">Logout</button>
+    </form>
+</div>

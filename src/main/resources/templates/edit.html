@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link href = "/main.css" rel = "stylesheet">
+
+</head>
+<body>
+
+ <div th:replace = "~{ nav.html :: navbar }"></div>
+
+ <div class="card" th:each = "i : ${data}">
+     <form action = "/edit" method = "post" id = "edit">
+         <input name = "newUsername" th:value="${#authentication.principal.username}" style="display: none;" sec:authorize="hasAuthority('user')">
+         <input name = "newUsername" value="GUEST" style="display: none;" sec:authorize="isAnonymous">
+         <input name = "id" th:value = "${i.id}" style = "display:none">
+         <input name = "newTitle" th:value = "${i.title}">
+         <input name = "newPrice" th:value = "${i.price}">
+         <input accept = "image/*" type = "file" id = "fileInput">
+         <input type = "hidden" name = "newImgURL" id = "newImgURL">
+         <button type = "submit">수정</button>
+     </form>
+ </div>
+
+ <script>
+    document.getElementById('edit').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        let file = document.getElementById('fileInput')
+
+        if (!file.files || file.files.length === 0) {
+            e.target.submit()
+            return
+        }
+
+        let fileName = encodeURIComponent(file.files[0].name)
+        let result = await fetch('/presigned-url?fileName=' + fileName)
+        result = await result.text()
+
+        let uploadResponse = await fetch(result, {
+            method : 'PUT',
+            body : file.files[0]
+        })
+
+        if (uploadResponse.ok) {
+            document.getElementById('newImgURL').value = result.split('?')[0];
+        }
+
+        e.target.submit()
+    })
+</script>
+
+</body>
+</html>

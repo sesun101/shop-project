@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link href = "/main.css" rel = "stylesheet">
+
+</head>
+<body>
+
+<div th:replace = "~{ nav.html :: navbar }"></div>
+
+<div class="detail">
+    <h4>상세페이지</h4>
+    <img th:src = "${#strings.isEmpty(data.img_url) ? 'https://placehold.co/300' : data.img_url}"
+         style = "width: 300px; height: 300px; object-fit: cover">
+    <h4 th:text = "${data.title}">상품명</h4>
+    <p th:text = "${#numbers.formatInteger(data.price, 3, 'COMMA')} + '원'">가격</p>
+</div>
+</body>
+</html>
