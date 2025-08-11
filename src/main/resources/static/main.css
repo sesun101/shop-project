@@ -43,8 +43,19 @@ input {
 .detail {
   text-align : center;
 }
-.detail img{
+.detail img {
   max-width : 30%;
   display : block;
   margin : auto;
+}
+.comment {
+  max-width: 600px; /* 댓글 영역 폭 제한 */
+  margin: 0 auto;
+}
+.comment-form {
+  text-align : center;
+}
+.comment-form textarea {
+  resize : none;
+  margin-top: 20px;
 }

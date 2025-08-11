@@ -18,7 +18,20 @@
     <img th:src = "${#strings.isEmpty(data.img_url) ? 'https://placehold.co/300' : data.img_url}"
          style = "width: 300px; height: 300px; object-fit: cover">
     <h4 th:text = "${data.title}">상품명</h4>
-    <p th:text = "${#numbers.formatInteger(data.price, 3, 'COMMA')} + '원'">가격</p>
+    <p th:text = "${#numbers.formatInteger(data.price, 0, 'COMMA')} + '원'">가격</p>
+</div>
+
+<div class="comment" th:each = "c : ${comment}">
+    <h4 th:text = "${c.username}">username</h4>
+    <span th:text = "${c.comment}">comment</span>
+</div>
+<div class="comment-form">
+    <form action = "/comment" method = "post">
+        <input name = "username" type = "hidden" th:value = "${#authentication.principal.username}" sec:authorize="isAuthenticated()">
+        <input name = "itemId" type = "hidden" th:value = "${data.id}">
+        <textarea name = "content" rows = "4" cols = "40" placeholder="리뷰 작성" sec:authorize="isAuthenticated()"></textarea>
+        <button type = "submit" sec:authorize="isAuthenticated">등록</button>
+    </form>
 </div>
 </body>
 </html>

@@ -20,7 +20,7 @@
          <h4>
              <a th:text = "${i.title}" th:href = "@{'/detail/' + ${i.id}}">상품</a>
          </h4>
-         <p th:text = "${#numbers.formatInteger(i.price, 3, 'COMMA')} + '원'">가격</p>
+         <p th:text = "${#numbers.formatInteger(i.price, 0, 'COMMA')} + '원'">가격</p>
          <a th:href = "@{'/edit/' + ${i.id}}" style = "display: inline" sec:authorize="hasAuthority('admin')">✏️</a>
          <a href = "#" class = "btn" th:attr = "data-id=${i.id}" style = "margin-left: 10px;" sec:authorize="hasAuthority('admin')">🗑️</a>
          <form th:action = "@{'/delete/image/' + ${i.id}}" method = "post">

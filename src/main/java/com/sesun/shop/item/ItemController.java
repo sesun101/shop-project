@@ -1,5 +1,7 @@
 package com.sesun.shop.item;
 
+import com.sesun.shop.comment.Comment;
+import com.sesun.shop.comment.CommentRepository;
 import com.sun.net.httpserver.HttpsServer;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -12,12 +14,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
 public class ItemController {
     private final ItemRepository itemRepository;
+    private final CommentRepository commentRepository;
     private final ItemService itemService;
     private final S3Service s3Service;
     @GetMapping("/list/page/{pageNum}")
@@ -45,6 +49,8 @@ public class ItemController {
     String detail(@PathVariable Long id, Model model) {
         Optional<Item> result = itemRepository.findById(id);
         if (result.isPresent()) {
+            List<Comment> comments = commentRepository.findByItemId(id);
+            model.addAttribute("comment", comments);
             model.addAttribute("data", result.get());
             return "detail.html";
         }
